@@ -1,9 +1,12 @@
 {
   "dependencies": {
+    "@types/noisejs": "^0.0.28",
     "bootstrap": "^5.2.3",
     "three": "^0.150.1"
   },
   "devDependencies": {
-    "@types/three": "^0.149.0"
+    "@types/three": "^0.149.0",
+    "ts-loader": "^9.4.2",
+    "webpack-cli": "^5.0.1"
   }
 }
