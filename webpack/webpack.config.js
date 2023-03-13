@@ -13,6 +13,17 @@ module.exports = {
           transpileOnly: true // add this option
         }
       },
+      {
+        test: /\.(jpe?g|gif|png|svg)$/i,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 10000
+            }
+          }
+        ]
+      }
     ],
   },
   entry: './src/index.tsx',

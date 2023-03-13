@@ -1,8 +1,10 @@
-import ReactDOM from 'react-dom';
-import { useRef, useState } from 'react'
+import { useRef, useState } from 'react';
+
 import { Canvas, useFrame } from '@react-three/fiber';
-import { CameraControls, PerspectiveCamera, OrbitControls } from '@react-three/drei'
+import { CameraControls, Image, PerspectiveCamera, OrbitControls, Environment } from '@react-three/drei';
 import THREE from 'three';
+
+import { px, py, pz, nx, ny, nz } from './assets/assets';
 
 function Box(props : any) {
     // This reference gives us direct access to the THREE.Mesh object
@@ -25,44 +27,53 @@ function Box(props : any) {
         <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />
       </mesh>
     )
-  }
+}
 
 export default function App() {
+    // const path = require('/assets/paintedsky');
 
     return (
-        <div id="canvas-container">
+        <div id="canvas-container" style={{ width: "100vw", height: "100vh" }}>
             <Canvas>
-                <ambientLight intensity={0.5} />
+            <color attach="background" args={['gray']} />    
+                <Environment
+                    background={true} // can be true, false or "only" (which only sets the background) (default: false)
+                    // blur={0} // blur factor between 0 and 1 (default: 0, only works with three 0.146 and up)
+                    files={[px, nx, py, ny, pz, nz]}
+                    // path={"/assets/paintedsky"}
+                    // preset={"park"}
+                    // scene={undefined} // adds the ability to pass a custom THREE.Scene, can also be a ref
+                    // encoding={undefined} // adds the ability to pass a custom THREE.TextureEncoding (default: THREE.sRGBEncoding for an array of files and THREE.LinearEncoding for a single texture)
+                />
+                {/* <Image scale={3} url={nz} /> */}
+                {/* <mesh>
+                    <planeBufferGeometry attach="geometry" args={[3, 3]} />
+                    <meshBasicMaterial attach="material" map={texture} />
+                </mesh> */}
+                <CameraControls makeDefault >
+                        <PerspectiveCamera makeDefault 
+                            fov={70} 
+                            aspect={window.innerWidth / window.innerHeight}  
+                            near={1} 
+                            far={20}
+                            position={[-4.37, 0, -4.75]}
+                        />
+                </CameraControls>
+                <hemisphereLight args={[0xffffff, 0xbbbbff, 1]} />
                 <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
-                <pointLight position={[-10, -10, -10]} />
+                {/* <pointLight position={[-10, -10, -10]} /> */}
+                    {/* <Cloud
+                        opacity={0.5}
+                        speed={0.4} // Rotation speed
+                        width={10} // Width of the full cloud
+                        depth={1.5} // Z-dir depth
+                        segments={20} // Number of particles
+                    /> */}
                 <Box position={[-1.2, 0, 0]} />
                 <Box position={[1.2, 0, 0]} />
                 <OrbitControls />
             </Canvas>
-
-            
-                {/* <Canvas camera={{
-                    position: [-4.37, 0, -4.75],
-                    fov: 70,
-                    aspect: window.innerWidth / window.innerHeight,
-                    near: 0.01,
-                    far: 100,
-                }}
-            >
-                <CameraControls />
-                <hemisphereLight args={[0xffffff, 0xbbbbff, 1]} />
-                {/* <PerspectiveCamera 
-                    args={[ 70, window.innerWidth / window.innerHeight, 0.01, 100 ]} 
-                    position={[-4.37, 0, -4.75]} 
-                /> 
-
-                <mesh>
-                    <boxGeometry />
-                    <meshStandardMaterial />
-                </mesh> </Canvas> */}
             
         </div>
     )
 }
-
-ReactDOM.render(<App />, document.getElementById('root'))
