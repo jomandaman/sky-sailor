@@ -1,10 +1,11 @@
 import { useRef, useState } from 'react';
 
 import { Canvas, useFrame } from '@react-three/fiber';
-import { CameraControls, Image, PerspectiveCamera, OrbitControls, Environment } from '@react-three/drei';
+import { CameraControls, PerspectiveCamera, OrbitControls, Environment, Cloud, Sky } from '@react-three/drei';
 import THREE from 'three';
 
 import { px, py, pz, nx, ny, nz } from './assets/assets';
+import { Plane } from 'components/Plane';
 
 function Box(props : any) {
     // This reference gives us direct access to the THREE.Mesh object
@@ -29,48 +30,38 @@ function Box(props : any) {
     )
 }
 
-export default function App() {
-    // const path = require('/assets/paintedsky');
+export default function App(props: any) {
 
     return (
         <div id="canvas-container" style={{ width: "100vw", height: "100vh" }}>
             <Canvas>
             <color attach="background" args={['gray']} />    
-                <Environment
-                    background={true} // can be true, false or "only" (which only sets the background) (default: false)
-                    // blur={0} // blur factor between 0 and 1 (default: 0, only works with three 0.146 and up)
+                {/* <Environment
+                    background={true} 
                     files={[px, nx, py, ny, pz, nz]}
-                    // path={"/assets/paintedsky"}
-                    // preset={"park"}
-                    // scene={undefined} // adds the ability to pass a custom THREE.Scene, can also be a ref
-                    // encoding={undefined} // adds the ability to pass a custom THREE.TextureEncoding (default: THREE.sRGBEncoding for an array of files and THREE.LinearEncoding for a single texture)
-                />
-                {/* <Image scale={3} url={nz} /> */}
-                {/* <mesh>
-                    <planeBufferGeometry attach="geometry" args={[3, 3]} />
-                    <meshBasicMaterial attach="material" map={texture} />
-                </mesh> */}
+                /> */}
                 <CameraControls makeDefault >
-                        <PerspectiveCamera makeDefault 
-                            fov={70} 
-                            aspect={window.innerWidth / window.innerHeight}  
-                            near={1} 
-                            far={20}
-                            position={[-4.37, 0, -4.75]}
-                        />
+                    <PerspectiveCamera makeDefault 
+                        position={[0,0,10]}
+                        {...props}
+                    />
                 </CameraControls>
                 <hemisphereLight args={[0xffffff, 0xbbbbff, 1]} />
+                <Sky
+                    distance={4500}
+                    sunPosition={[0, 1, 8]}
+                    inclination={10}
+                    azimuth={.25}
+                    mieCoefficient={0}
+                    turbidity={0}
+                    {...props}
+                />
                 <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
                 {/* <pointLight position={[-10, -10, -10]} /> */}
-                    {/* <Cloud
-                        opacity={0.5}
-                        speed={0.4} // Rotation speed
-                        width={10} // Width of the full cloud
-                        depth={1.5} // Z-dir depth
-                        segments={20} // Number of particles
-                    /> */}
-                <Box position={[-1.2, 0, 0]} />
-                <Box position={[1.2, 0, 0]} />
+                {/* <Cloud size={2} rotation={[0, Math.PI / 2, 0]} position={[20, 0, 0]} scale={[2, 2, 2]} /> */}
+                {/* <Box position={[-1.2, 0, 0]} /> */}
+                <Plane />
+                {/* <Box position={[1.2, 0, 0]} /> */}
                 <OrbitControls />
             </Canvas>
             
